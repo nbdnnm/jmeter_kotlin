@@ -1,0 +1,36 @@
+buildscript {
+    ext.kotlin_version = '1.2.51'
+    ext.jmeter_version = '4.0'
+
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+group 'io.fake'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'kotlin'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    compile "org.apache.jmeter:ApacheJMeter_core:$jmeter_version"
+    compile "org.apache.jmeter:ApacheJMeter_components:$jmeter_version"
+    compile "org.apache.jmeter:ApacheJMeter_http:$jmeter_version"
+    compile "org.apache.jmeter:ApacheJMeter_functions:$jmeter_version"
+    compile "org.apache.jmeter:ApacheJMeter_config:$jmeter_version"
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
