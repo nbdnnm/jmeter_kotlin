@@ -24,7 +24,7 @@ fun main(args: Array<String>) {
     val jmeterHome = File("/")
     val slash = "/"
 
-    val jmeterProperties = File("src/test/resources/jmeter.properties")
+    val jmeterProperties = File("bin/jmeter.properties")
 
     val jmeter = StandardJMeterEngine()
 
@@ -40,37 +40,44 @@ fun main(args: Array<String>) {
 
     // open blazemeter.com
     val blazemetercomSampler = HTTPSamplerProxy()
-    blazemetercomSampler.domain = "blazemeter.com"
-    blazemetercomSampler.port = 80
-    blazemetercomSampler.path = "/"
-    blazemetercomSampler.method = "GET"
-    blazemetercomSampler.name = "Open blazemeter.com"
-    blazemetercomSampler.setProperty(TestElement.TEST_CLASS, HTTPSamplerProxy::class.java.name)
-    blazemetercomSampler.setProperty(TestElement.GUI_CLASS, HttpTestSampleGui::class.java.name)
-
+    with(blazemetercomSampler) {
+        domain = "blazemeter.com"
+        port = 80
+        path = "/"
+        method = "GET"
+        name = "Open blazemeter.com"
+        setProperty(TestElement.TEST_CLASS, HTTPSamplerProxy::class.java.name)
+        setProperty(TestElement.GUI_CLASS, HttpTestSampleGui::class.java.name)
+    }
 
     // Loop Controller
     val loopController = LoopController()
-    loopController.loops = 1
-    loopController.setFirst(true)
-    loopController.setProperty(TestElement.TEST_CLASS, LoopController::class.java.name)
-    loopController.setProperty(TestElement.GUI_CLASS, LoopControlPanel::class.java.name)
-    loopController.initialize()
+    with(loopController) {
+        loops = 1
+        setFirst(true)
+        setProperty(TestElement.TEST_CLASS, LoopController::class.java.name)
+        setProperty(TestElement.GUI_CLASS, LoopControlPanel::class.java.name)
+        initialize()
+    }
 
     // Thread Group
     val threadGroup = ThreadGroup()
-    threadGroup.name = "Example Thread Group"
-    threadGroup.numThreads = 1
-    threadGroup.rampUp = 1
-    threadGroup.setSamplerController(loopController)
-    threadGroup.setProperty(TestElement.TEST_CLASS, ThreadGroup::class.java.name)
-    threadGroup.setProperty(TestElement.GUI_CLASS, ThreadGroupGui::class.java.name)
+    with(threadGroup) {
+        name = "Example Thread Group"
+        numThreads = 1
+        rampUp = 1
+        setSamplerController(loopController)
+        setProperty(TestElement.TEST_CLASS, ThreadGroup::class.java.name)
+        setProperty(TestElement.GUI_CLASS, ThreadGroupGui::class.java.name)
+    }
 
     // Test Plan
     val testPlan = TestPlan("Create JMeter Script From Java Code")
-    testPlan.setProperty(TestElement.TEST_CLASS, TestPlan::class.java.name)
-    testPlan.setProperty(TestElement.GUI_CLASS, TestPlanGui::class.java.name)
-    testPlan.setUserDefinedVariables(ArgumentsPanel().createTestElement() as Arguments)
+    with(testPlan) {
+        setProperty(TestElement.TEST_CLASS, TestPlan::class.java.name)
+        setProperty(TestElement.GUI_CLASS, TestPlanGui::class.java.name)
+        setUserDefinedVariables(ArgumentsPanel().createTestElement() as Arguments)
+    }
 
     // Construct Test Plan from previously initialized elements
     testPlanTree.add(testPlan)
@@ -90,9 +97,8 @@ fun main(args: Array<String>) {
 
 
     // Store execution results into a .jtl file
-    val logFile = "out/example.jtl"
     val logger = ResultCollector(summer)
-    logger.filename = logFile
+    logger.filename = "out/example.jtl"
     testPlanTree.add(testPlanTree.array[0], logger)
 
     // Run Test Plan
