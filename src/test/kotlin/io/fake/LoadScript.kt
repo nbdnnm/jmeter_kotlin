@@ -39,8 +39,7 @@ fun main(args: Array<String>) {
 
 
     // open blazemeter.com
-    val blazemetercomSampler = HTTPSamplerProxy()
-    with(blazemetercomSampler) {
+    val blazemetercomSampler = HTTPSamplerProxy().apply {
         domain = "blazemeter.com"
         port = 80
         path = "/"
@@ -51,8 +50,7 @@ fun main(args: Array<String>) {
     }
 
     // Loop Controller
-    val loopController = LoopController()
-    with(loopController) {
+    val loopController = LoopController().apply {
         loops = 1
         setFirst(true)
         setProperty(TestElement.TEST_CLASS, LoopController::class.java.name)
@@ -61,8 +59,7 @@ fun main(args: Array<String>) {
     }
 
     // Thread Group
-    val threadGroup = ThreadGroup()
-    with(threadGroup) {
+    val threadGroup = ThreadGroup().apply {
         name = "Example Thread Group"
         numThreads = 1
         rampUp = 1
@@ -72,8 +69,7 @@ fun main(args: Array<String>) {
     }
 
     // Test Plan
-    val testPlan = TestPlan("Create JMeter Script From Java Code")
-    with(testPlan) {
+    val testPlan = TestPlan("Create JMeter Script From Java Code").apply {
         setProperty(TestElement.TEST_CLASS, TestPlan::class.java.name)
         setProperty(TestElement.GUI_CLASS, TestPlanGui::class.java.name)
         setUserDefinedVariables(ArgumentsPanel().createTestElement() as Arguments)
