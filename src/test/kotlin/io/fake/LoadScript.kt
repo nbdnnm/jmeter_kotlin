@@ -45,16 +45,12 @@ fun main(args: Array<String>) {
         path = "/"
         method = "GET"
         name = "Open blazemeter.com"
-        setProperty(TestElement.TEST_CLASS, HTTPSamplerProxy::class.java.name)
-        setProperty(TestElement.GUI_CLASS, HttpTestSampleGui::class.java.name)
     }
 
     // Loop Controller
     val loopController = LoopController().apply {
         loops = 1
         setFirst(true)
-        setProperty(TestElement.TEST_CLASS, LoopController::class.java.name)
-        setProperty(TestElement.GUI_CLASS, LoopControlPanel::class.java.name)
         initialize()
     }
 
@@ -64,16 +60,10 @@ fun main(args: Array<String>) {
         numThreads = 1
         rampUp = 1
         setSamplerController(loopController)
-        setProperty(TestElement.TEST_CLASS, ThreadGroup::class.java.name)
-        setProperty(TestElement.GUI_CLASS, ThreadGroupGui::class.java.name)
     }
 
     // Test Plan
-    val testPlan = TestPlan("Create JMeter Script From Java Code").apply {
-        setProperty(TestElement.TEST_CLASS, TestPlan::class.java.name)
-        setProperty(TestElement.GUI_CLASS, TestPlanGui::class.java.name)
-        setUserDefinedVariables(ArgumentsPanel().createTestElement() as Arguments)
-    }
+    val testPlan = TestPlan("Create JMeter Script From Java Code")
 
     // Construct Test Plan from previously initialized elements
     testPlanTree.add(testPlan)
